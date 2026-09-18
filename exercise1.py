@@ -27,24 +27,28 @@ def load_menu() -> list[dict]:
 
 def available_under(menu: list[dict], limit: float) -> list[dict]:
     """Return available items priced below `limit`, sorted cheapest first."""
-    items_under_10 = []
+    items = []
+    
     for item in menu:
         if item["price"]<limit:
-            items_under_10.append(item["price"])
+            items.append(item)
+
+    
+    sorted_list = sorted(items,key=lambda x:x["price"])
             
-    # TODO: filter items priced under $10, then sort by price.
-    items_under_10.sort()
-    return items_under_10
-    raise NotImplementedError
+    
+    
+    return sorted_list
+   
 
 
 def main() -> None:
     menu = load_menu()
     for item in available_under(menu, 10.00):
-        print(f"{item['name']:<20}${item['price']:.2f}")
-        # TODO: print name and price using an f-string.
+        print(f"{item["name"]:<20}${item["price"]:.2f}")
+       
         # Hint: f"{item['name']:<20} ${item['price']:.2f}"
-        pass
+        
 
 
 if __name__ == "__main__":

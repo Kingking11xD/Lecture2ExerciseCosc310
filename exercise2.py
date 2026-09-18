@@ -21,24 +21,33 @@ class Cart:
         self.lines: list[dict] = []
 
     def add_item(self, item: dict, qty: int = 1) -> None:
-        # TODO
-        raise NotImplementedError
+        item_inline = {"item_id":item["id"],"name": item["name"],"price":item["price"],"qty":qty}
+
+        if len(self.lines)!=0:
+           for inCart in self.lines:
+               if item["name"] in inCart["name"]:
+                   inCart["qty"] +=qty
+                   return
+        self.lines.append(item_inline)
+        
 
     def remove_item(self, item_id: int) -> None:
-        # TODO
-        raise NotImplementedError
+        self["id"].remove(item_id)
+        
 
     def clear(self) -> None:
-        # TODO
-        raise NotImplementedError
+        self.clear()
+        
 
     def total(self) -> float:
-        # TODO - round ONCE, at the end
-        raise NotImplementedError
-
+        total =0
+        for item in self.lines:
+            total +=  round(item["price"]*item["qty"],2)
+        return total
+       
     def __repr__(self) -> str:
-        # TODO
-        raise NotImplementedError
+        return f"Cart {len(self.lines)} items, ${cart.total()}"
+        
 
 
 if __name__ == "__main__":

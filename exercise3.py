@@ -21,15 +21,30 @@ class Cart:
     def __init__(self) -> None:
         self.lines: list[dict] = []
 
-    def add_item(self, item: dict, qty: int = 1) -> None:
+    def add_item(self, item: dict, qty: int ) -> None:
+        
+        if qty <=0:
+            raise ValueError("Invalid number quantatity input")
+        if not item["available"]:
+            raise OutOfStockError
+        item_inline = {"item_id":item["id"],"name": item["name"],"price":item["price"],"qty":qty}
+        
+        if len(self.lines)!=0:
+            for inCart in self.lines:
+                if item["name"] in inCart["name"]:
+                    inCart["qty"] +=qty
+                    return
+        self.lines.append(item_inline)                        
         # TODO: validate FIRST, then mutate.
         #   if qty < 1:                 raise ValueError(...)
         #   if not item["available"]:   raise OutOfStockError(...)
-        raise NotImplementedError
+        
 
     def remove_item(self, item_id: int) -> None:
+         if item_id not in self.lines:
+             raise KeyError
         # TODO: raise KeyError if the item is not in the cart
-        raise NotImplementedError
+        
 
     def total(self) -> float:
         return round(sum(line["price"] * line["qty"] for line in self.lines), 2)
@@ -44,7 +59,11 @@ if __name__ == "__main__":
     miso = menu[3]            # NOT available
 
     cart = Cart()
-
+    try:
+        cart.add_item(gyoza,0)
+        #cart.add_item(miso,3)
+    except ValueError as e:
+        print(f"rejected: {e}")
     # TODO: demonstrate each rejection with try/except and a readable message.
     # Example:
     # try:
